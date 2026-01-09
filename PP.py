@@ -1,11 +1,11 @@
 import geemap
 import ee
 
-def ProtectedPlanetHectares(aoi):
-    PP_dataset = ee.FeatureCollection("WCMC/WDPA/current/polygons")
+def protected_planet_hectares(aoi):
+    pp_dataset = ee.FeatureCollection("WCMC/WDPA/current/polygons")
 
     intersection = (
-        PP_dataset
+        pp_dataset
         .filterBounds(aoi)
         .geometry()
         .intersection(aoi.geometry(), ee.ErrorMargin(1))
@@ -15,6 +15,6 @@ def ProtectedPlanetHectares(aoi):
 
     return area_ha.getInfo()
 
-def ProtectedPlanetPercent(aoi):
-    PPHectares = ProtectedPlanetHectares(aoi)
-    return (PPHectares / (aoi.geometry().area(1).getInfo()/10000))*100
+def protected_planet_percent(aoi):
+    pp_hectares = protected_planet_hectares(aoi)
+    return (pp_hectares / (aoi.geometry().area(1).getInfo()/10000))*100
