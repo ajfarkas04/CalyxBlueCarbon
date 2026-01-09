@@ -42,7 +42,7 @@ def gmw_percent(aoi, year):
     Hectares = gmw_hectares(aoi, year)
     return (Hectares / (aoi.geometry().area(1).getInfo()/10000))*100
 
-def export_gmw_tif(aoi, year, filename=None):
+def export_gmw_tif(aoi, year, folder):
     year_string = str(year)
     extent_raster = ee.ImageCollection(
         "projects/earthengine-legacy/assets/projects/sat-io/open-datasets/GMW/extent/GMW_V3")
@@ -53,14 +53,9 @@ def export_gmw_tif(aoi, year, filename=None):
     # Create mask
     mangrove_year = extent_year_clipped.eq(1)
 
-    # Choose filename if none
-    if filename is None:
-        timestamp = datetime.now().strftime('%Y_%m_%d')
-        filename = f'GMW_{year}_{timestamp}.tif'
-
     geemap.ee_export_image(
         mangrove_year.updateMask(mangrove_year),  # only mangrove pixels
-        filename='outputs/' + filename,  # output file in outputs folder
+        filename=folder + '/gmw.tif',  # output file in outputs folder
         scale=30,  # 30m resolution
         region=aoi.geometry(),
         file_per_band=False
@@ -218,11 +213,11 @@ def export_jaxa_tif_fnf4(aoi, year, folder):
     )
 
 #Wrapper function for fnf3 and fnf4 exports
-def export_jaxa_tif(aoi, year, filename=None):
+def export_jaxa_tif(aoi, year, folder):
     if year >= 2017:
-        export_jaxa_tif_fnf4(aoi,year, filename)
+        export_jaxa_tif_fnf4(aoi,year, folder)
     else:
-        export_jaxa_tif_fnf3(aoi,year, filename)
+        export_jaxa_tif_fnf3(aoi,year, folder)
 
 #####################MURRAY#####################
 

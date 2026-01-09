@@ -2,6 +2,7 @@ import geemap
 import ee
 import csv
 import PP, Baseline, SLR
+import os
 
 # Main tools!
 def convert_to_ee(filepath):
@@ -21,6 +22,9 @@ def convert_to_ee(filepath):
 
 
 def get_csv(filepath, start_year, sedimentation, folder):
+    #Make folder if doesn't exist yet
+    if not os.path.exists(folder):
+        os.makedirs(folder)
     # Parse input data
     aoi = convert_to_ee(filepath)
     eval_year = start_year - 1

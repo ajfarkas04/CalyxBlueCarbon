@@ -108,8 +108,8 @@ def export_dem_geotiff(aoi, folder_name):
     geemap.ee_export_image(
         dem_image,
         filename=folder_name + "/DEM.tif",
-        # FOR USERS: change line below to scale = 50 if the DEM  geotiff fails to download.
-        scale=50,
+        # FOR USERS: change line below to either 30, 50, or 100 if download fails. Bigger number = easier download.
+        scale=30,
         region=aoi.geometry()
     )
 
