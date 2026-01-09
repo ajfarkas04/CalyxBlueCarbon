@@ -168,3 +168,23 @@ def area_inundated_percent(aoi, inundation_height_m):
 
     # return percentage
     return (hectares / total_area.getInfo()) * 100
+
+def export_submergence_geotiff(aoi, inundation_height_m, folder_name):
+    '''
+    Exports a GeoTIFF of inundated areas to output folder.
+    File will be named submergence.tif
+    '''
+
+    dem_image = get_elevation_map(aoi)
+
+    # Mask DEM to inundated areas, where 1 = inundated
+    inundated = dem_image.lte(inundation_height_m)
+    inundated_dem = dem_image.updateMask(inundated)
+
+    geemap.ee_export_image(
+        inundated_dem,
+        filename=folder_name + "/submergence.tif",
+        # FOR USERS: change line below to scale = 50 if the submergence geotiff fails to download.
+        scale=30,
+        region=aoi.geometry()
+    )
